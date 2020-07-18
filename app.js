@@ -8,7 +8,7 @@ APP.use((req, res, next) => {
 });
 
 APP.use((req, res, next) => {
-    res.send('Hello from Ecpress');
+    res.send('Hello from Express');
 });
 
 module.exports = APP;  
