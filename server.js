@@ -1,7 +1,8 @@
-var http = require('http');
+const APP = require('./app');
+const PORT = process.env.PORT || 3000;
+const HTTP = require('http');
 
-const SERVER = http.createServer((req, res) => {
-    res.end('This is my first response');
-});
+APP.set('port', PORT);
+const SERVER = HTTP.createServer(APP);
 
-SERVER.listen(process.env.PORT || 3000)  
+SERVER.listen(PORT);
