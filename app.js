@@ -26,7 +26,7 @@ APP.use((req, res, next) => {
         'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader(
         'Access-Control-Allow-Methods',
-        'GET, POST, PATCH, DELETE, OPTIONS');
+        'GET, POST, PATCH, PUT, DELETE, OPTIONS');
     next();
 });
 
@@ -57,6 +57,16 @@ APP.get('/api/posts', (req, res, next) => {
     });
 });
 
+APP.get('/api/posts/:id', (req, res, next) => {
+    Post.findById(req.params.id).then(post => {
+        if(post) {
+            res.status(200).json(post);
+        } else {
+            res.status(404).json({ message: "Post not found!" });
+        }
+    })
+});
+
 APP.delete("/api/posts/:id", (req, res, next) => {
     console.log('Deleting -> ', req.params.id);
     Post.deleteOne({ _id: req.params.id })
@@ -65,6 +75,20 @@ APP.delete("/api/posts/:id", (req, res, next) => {
             res.status(200).json({ message: "Post deleted!" });
         });
     
+});
+
+// APP.put() -> To put new resource and completely replace the old one
+// APP.patch() -> To only update existing resource with new value
+APP.put("/api/posts/:id", (req, res, next) => {
+    const POST = new Post({
+        _id: req.body.id,
+        title: req.body.title,
+        content: req.body.content
+    });
+    Post.updateOne({_id: req.params.id}, POST)
+        .then(result => {
+            res.status(200).json({ message: "Update successful"});
+        });
 });
 
 module.exports = APP;  
