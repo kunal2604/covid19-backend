@@ -1,6 +1,6 @@
 const EXPRESS = require('express');
-
 const APP = EXPRESS();
+const Post = require('./models/post');
 
 APP.use(EXPRESS.json());
 APP.use(EXPRESS.urlencoded({ extended: false }));
