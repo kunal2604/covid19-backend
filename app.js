@@ -3,7 +3,7 @@ const APP = EXPRESS();
 const Post = require('./models/post');
 const MONGOOSE = require('mongoose');
 
-const MONGO_SERVER = "mongodb+srv://kunal2604:PyeFWckO3UWFSQ1f@cluster2604.u09yn.mongodb.net/node-angular?retryWrites=true&w=majority";
+const MONGO_SERVER = "mongodb+srv://kunal2604:PyeFWckO3UWFSQ1f@cluster2604.u09yn.mongodb.net/covid19?retryWrites=true&w=majority";
 
 MONGOOSE.connect(
     MONGO_SERVER,
