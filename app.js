@@ -19,7 +19,6 @@ MONGOOSE.connect(
 APP.use(EXPRESS.json());
 APP.use(EXPRESS.urlencoded({ extended: false }));
 
-
 APP.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -45,23 +44,14 @@ APP.post('/api/posts', (req, res, next) => {
 });
 
 APP.get('/api/posts', (req, res, next) => {
-    const POSTS = [
-        {
-            id: "fadf234hj",
-            title: "First dummy post from server",
-            content: "Hello. This is coming from the backend. But this is purely dummy data"
-        },
-        {
-            id: "kjhk24",
-            title: "Second dummy post from server",
-            content: "Hello again!! Thiis is also dummy data"
-        }
-    ]
-    // 200 --> everything OK
-     res.status(200).json({
-         message: 'Posts fetched successfully!',
-         posts: POSTS
-     });
+    Post.find().then(documents => {
+        console.log(documents);
+        // 200 --> everything OK
+        res.status(200).json({
+        message: 'Posts fetched successfully!',
+        posts: documents
+        });
+    });
 });
 
 module.exports = APP;  
