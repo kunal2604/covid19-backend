@@ -12,7 +12,17 @@ APP.use((req, res, next) => {
         'GET, POST, PATCH, DELETE, OPTIONS');
     next();
 });
-APP.use('/api/posts', (req, res, next) => {
+
+APP.post('/api/posts', (req, res, next) => {
+    const POST = req.body;
+    console.log(POST);
+    // 201 --> everything OK, a new resource was created
+    res.status(201).json({
+        message: 'Post added successfully'
+    });
+});
+
+APP.get('/api/posts', (req, res, next) => {
     const POSTS = [
         {
             id: "fadf234hj",
@@ -25,6 +35,7 @@ APP.use('/api/posts', (req, res, next) => {
             content: "Hello again!! Thiis is also dummy data"
         }
     ]
+    // 200 --> everything OK
      res.status(200).json({
          message: 'Posts fetched successfully!',
          posts: POSTS
