@@ -1,9 +1,24 @@
 const EXPRESS = require('express');
 const APP = EXPRESS();
 const Post = require('./models/post');
+const MONGOOSE = require('mongoose');
+
+const MONGO_SERVER = "mongodb+srv://kunal2604:PyeFWckO3UWFSQ1f@cluster2604.u09yn.mongodb.net/node-angular?retryWrites=true&w=majority";
+
+MONGOOSE.connect(
+    MONGO_SERVER,
+    { useUnifiedTopology: true, useNewUrlParser: true }
+    )
+    .then(() => {
+        console.log('Connected to database!');
+    })
+    .catch(() => {
+        console.log('Connection failed!');
+    });
 
 APP.use(EXPRESS.json());
 APP.use(EXPRESS.urlencoded({ extended: false }));
+
 
 APP.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,6 +37,7 @@ APP.post('/api/posts', (req, res, next) => {
         content: req.body.content
     });
     console.log(POST);
+    POST.save();
     // 201 --> everything OK, a new resource was created
     res.status(201).json({
         message: 'Post added successfully'
