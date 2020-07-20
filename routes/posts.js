@@ -3,7 +3,7 @@ const ROUTER = EXPRESS.Router();
 
 const Post = require('../models/post');
 
-ROUTER.post('/api/posts', (req, res, next) => {
+ROUTER.post('', (req, res, next) => {
     const POST = new Post({
         title: req.body.title,
         content: req.body.content
@@ -19,7 +19,7 @@ ROUTER.post('/api/posts', (req, res, next) => {
     
 });
 
-ROUTER.get('/api/posts', (req, res, next) => {
+ROUTER.get('', (req, res, next) => {
     Post.find().then(documents => {
         console.log(documents);
         // 200 --> everything OK
@@ -30,7 +30,7 @@ ROUTER.get('/api/posts', (req, res, next) => {
     });
 });
 
-ROUTER.get('/api/posts/:id', (req, res, next) => {
+ROUTER.get('/:id', (req, res, next) => {
     Post.findById(req.params.id).then(post => {
         if(post) {
             res.status(200).json(post);
@@ -40,7 +40,7 @@ ROUTER.get('/api/posts/:id', (req, res, next) => {
     })
 });
 
-ROUTER.delete("/api/posts/:id", (req, res, next) => {
+ROUTER.delete("/:id", (req, res, next) => {
     console.log('Deleting -> ', req.params.id);
     Post.deleteOne({ _id: req.params.id })
         .then(result => {
@@ -52,7 +52,7 @@ ROUTER.delete("/api/posts/:id", (req, res, next) => {
 
 // APP.put() -> To put new resource and completely replace the old one
 // APP.patch() -> To only update existing resource with new value
-ROUTER.put("/api/posts/:id", (req, res, next) => {
+ROUTER.put("/:id", (req, res, next) => {
     const POST = new Post({
         _id: req.body.id,
         title: req.body.title,

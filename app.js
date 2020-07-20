@@ -30,6 +30,6 @@ APP.use((req, res, next) => {
     next();
 });
 
-APP.use(POST_ROUTER);
+APP.use("/api/posts", POST_ROUTER);
 
 module.exports = APP;  
