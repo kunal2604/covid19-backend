@@ -26,15 +26,20 @@ const STORAGE = MULTER.diskStorage({
 }); 
 
 ROUTER.post('', MULTER({storage: STORAGE}).single('image'), (req, res, next) => { // ** 'image' name coming from Angular **
+    const IMAGE_PATH = req.protocol + '://' + req.get('host');
     const POST = new Post({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: IMAGE_PATH + '/images/' + req.file.filename 
     });
     console.log(POST);
     POST.save().then(createdPost => {
         res.status(201).json({
             message: 'Post added successfully',
-            postId: createdPost._id
+            post: {
+                ...createdPost,
+                id: createdPost._id
+            }
         });
     })
     // 201 --> everything OK, a new resource was created

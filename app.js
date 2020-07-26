@@ -18,6 +18,7 @@ MONGOOSE.connect(
 
 APP.use(EXPRESS.json());
 APP.use(EXPRESS.urlencoded({ extended: false }));
+APP.use("/images", EXPRESS.static('images'));
 
 APP.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
