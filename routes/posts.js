@@ -1,9 +1,31 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-
+const MULTER = require("multer");
 const Post = require('../models/post');
 
-ROUTER.post('', (req, res, next) => {
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+};
+
+const STORAGE = MULTER.diskStorage({
+    destination: (req, file, callback) => {
+        const IS_VALID = MIME_TYPE_MAP[file.mimetype];
+        let error = new Error("Invalid mime type");
+        if(IS_VALID) {
+            error = null;
+        }
+        callback(error, 'images'); // relative to server.js
+    },
+    filename: (req, file, callback) => {
+        const NAME = file.originalname.toLowerCase().split(' ').join('-');
+        const EXTENSION = MIME_TYPE_MAP[file.mimetype];
+        callback(null, NAME + '-' + Date.now() + '.' + EXTENSION);
+    }
+}); 
+
+ROUTER.post('', MULTER({storage: STORAGE}).single('image'), (req, res, next) => { // ** 'image' name coming from Angular **
     const POST = new Post({
         title: req.body.title,
         content: req.body.content
@@ -16,7 +38,6 @@ ROUTER.post('', (req, res, next) => {
         });
     })
     // 201 --> everything OK, a new resource was created
-    
 });
 
 ROUTER.get('', (req, res, next) => {
