@@ -32,7 +32,6 @@ ROUTER.post('', MULTER({storage: STORAGE}).single('image'), (req, res, next) => 
         content: req.body.content,
         imagePath: IMAGE_PATH + '/images/' + req.file.filename 
     });
-    console.log(POST);
     POST.save().then(createdPost => {
         res.status(201).json({
             message: 'Post added successfully',
@@ -47,7 +46,6 @@ ROUTER.post('', MULTER({storage: STORAGE}).single('image'), (req, res, next) => 
 
 ROUTER.get('', (req, res, next) => {
     Post.find().then(documents => {
-        console.log(documents);
         // 200 --> everything OK
         res.status(200).json({
         message: 'Posts fetched successfully!',
@@ -67,10 +65,8 @@ ROUTER.get('/:id', (req, res, next) => {
 });
 
 ROUTER.delete("/:id", (req, res, next) => {
-    console.log('Deleting -> ', req.params.id);
     Post.deleteOne({ _id: req.params.id })
         .then(result => {
-            console.log(result);
             res.status(200).json({ message: "Post deleted!" });
         });
     
@@ -78,11 +74,17 @@ ROUTER.delete("/:id", (req, res, next) => {
 
 // APP.put() -> To put new resource and completely replace the old one
 // APP.patch() -> To only update existing resource with new value
-ROUTER.put("/:id", (req, res, next) => {
+ROUTER.put("/:id", MULTER({storage: STORAGE}).single('image'), (req, res, next) => {
+    let imagePath = req.body.imagePath;
+    if(req.file) {
+        const URL = req.protocol + '://' + req.get('host');
+        imagePath = URL + '/images/' + req.file.filename;
+    }
     const POST = new Post({
         _id: req.body.id,
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath
     });
     Post.updateOne({_id: req.params.id}, POST)
         .then(result => {
