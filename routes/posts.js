@@ -45,7 +45,15 @@ ROUTER.post('', MULTER({storage: STORAGE}).single('image'), (req, res, next) => 
 });
 
 ROUTER.get('', (req, res, next) => {
-    Post.find().then(documents => {
+    const PAGE_SIZE = +req.query.pagesize;  // + converts string to number
+    const CURRENT_PAGE = +req.query.page;
+    const POST_QUERY = Post.find();
+    if(PAGE_SIZE && CURRENT_PAGE) {
+        POST_QUERY
+            .skip(PAGE_SIZE * (CURRENT_PAGE-1))
+            .limit(PAGE_SIZE)
+    }
+    POST_QUERY.then(documents => {
         // 200 --> everything OK
         res.status(200).json({
         message: 'Posts fetched successfully!',
