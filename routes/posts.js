@@ -48,18 +48,25 @@ ROUTER.get('', (req, res, next) => {
     const PAGE_SIZE = +req.query.pagesize;  // + converts string to number
     const CURRENT_PAGE = +req.query.page;
     const POST_QUERY = Post.find();
+    let fetchedPost;
     if(PAGE_SIZE && CURRENT_PAGE) {
         POST_QUERY
             .skip(PAGE_SIZE * (CURRENT_PAGE-1))
             .limit(PAGE_SIZE)
     }
-    POST_QUERY.then(documents => {
-        // 200 --> everything OK
-        res.status(200).json({
-        message: 'Posts fetched successfully!',
-        posts: documents
+    POST_QUERY
+        .then(documents => {
+            fetchedPost = documents;
+            return Post.count();
+        })
+        .then(count => {
+            // 200 --> everything OK
+            res.status(200).json({
+                message: "Posts fetched successfully",
+                posts: fetchedPost,
+                maxPosts: count
+            })
         });
-    });
 });
 
 ROUTER.get('/:id', (req, res, next) => {
