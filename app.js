@@ -2,7 +2,9 @@ const EXPRESS = require('express');
 const APP = EXPRESS();
 const MONGOOSE = require('mongoose');
 
-const POST_ROUTER = require('./routes/posts');
+const POST_ROUTES = require('./routes/posts');
+const USER_ROUTES = require('./routes/user');
+
 const MONGO_SERVER = "mongodb+srv://kunal2604:PyeFWckO3UWFSQ1f@cluster2604.u09yn.mongodb.net/covid19?retryWrites=true&w=majority";
 
 MONGOOSE.connect(
@@ -31,6 +33,7 @@ APP.use((req, res, next) => {
     next();
 });
 
-APP.use("/api/posts", POST_ROUTER);
+APP.use('/api/posts', POST_ROUTES);
+APP.use('/api/user', USER_ROUTES);
 
 module.exports = APP;  
