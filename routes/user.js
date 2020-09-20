@@ -13,14 +13,16 @@ ROUTER.post('/signup', (req, res, next) => {
             });
             USER.save()
                 .then(result => {
-                    res.send(201).json({
+                    console.log(result);
+                    res.status(201).json({
                         message: 'User created!',
                         result: result
                     });
                 })
                 .catch(err => {
-                    res.send(500).json({
-                        error: err
+                    console.log(err);
+                    res.status(500).json({
+                        errorSignup: err
                     });
                 });
         });  
